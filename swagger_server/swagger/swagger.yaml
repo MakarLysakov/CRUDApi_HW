@@ -1,0 +1,197 @@
+openapi: 3.0.3
+info:
+  title: Районная поликлиника
+  version: 1.0.0
+servers:
+- url: https://virtserver.swaggerhub.com/MakarLysakov/Hosp/1.0.0
+  description: SwaggerHub API Auto Mocking
+- url: http://localhost:8080/api/v1/
+  description: Dev server
+paths:
+  /ill:
+    get:
+      tags:
+      - Ill_array
+      summary: Выдает список пациентов
+      operationId: get_allill
+      responses:
+        "200":
+          description: Выдало инормацию о больных
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Ill_array'
+        default:
+          description: Какая-то ошибка
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      x-openapi-router-controller: swagger_server.controllers.ill_array_controller
+    post:
+      tags:
+      - Ill_array
+      summary: Метод внесения информации о пациенте
+      operationId: create_ill
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Ill_obj'
+        required: true
+      responses:
+        "200":
+          description: Выдало инормацию о больных
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Ill_obj'
+        default:
+          description: Какая-то ошибка
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      x-openapi-router-controller: swagger_server.controllers.ill_array_controller
+  /Ill_array/{Ill_id}:
+    get:
+      tags:
+      - Ill_array
+      summary: Метод получения больного по идентификатору
+      operationId: get_ill_by_id
+      parameters:
+      - name: Ill_id
+        in: path
+        description: Идентификатор больного
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+      responses:
+        "200":
+          description: Выдало инормацию о больных
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Ill_obj'
+        default:
+          description: Какая-то ошибка
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      x-openapi-router-controller: swagger_server.controllers.ill_array_controller
+    put:
+      tags:
+      - Ill_array
+      summary: Метод изменения информации о больном по идентификатору
+      operationId: change_ill_by_id
+      parameters:
+      - name: Ill_id
+        in: path
+        description: Идентификатор больного
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Ill_array_Ill_id_body'
+      responses:
+        "200":
+          description: Выдало инормацию о больных
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Ill_obj'
+        default:
+          description: Какая-то ошибка
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      x-openapi-router-controller: swagger_server.controllers.ill_array_controller
+    delete:
+      tags:
+      - Ill_array
+      summary: Метод удаления пациента по индентификатору
+      operationId: delete_toy_by_id
+      parameters:
+      - name: Ill_id
+        in: path
+        description: Идентификатор больного
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+      responses:
+        "200":
+          description: Успешно  удалило информацию о больном
+          content:
+            application/json: {}
+        default:
+          description: Какая-то ошибка
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      x-openapi-router-controller: swagger_server.controllers.ill_array_controller
+components:
+  schemas:
+    Ill_obj:
+      required:
+      - gender
+      - name
+      - status
+      type: object
+      properties:
+        Ill_id:
+          type: integer
+        name:
+          type: string
+        gender:
+          type: string
+          enum:
+          - мужчина
+          - женщина
+        status:
+          type: string
+          enum:
+          - на личении
+          - выписан
+      example:
+        gender: мужчина
+        Ill_id: 0
+        name: name
+        status: на личении
+    Ill_array:
+      type: array
+      items:
+        $ref: '#/components/schemas/Ill_obj'
+    Error:
+      required:
+      - code
+      - message
+      type: object
+      properties:
+        code:
+          type: integer
+        message:
+          type: string
+    Ill_array_Ill_id_body:
+      type: object
+      properties:
+        Ill_id:
+          type: integer
+        name:
+          type: string
+        gender:
+          type: string
+        status:
+          type: string
+
